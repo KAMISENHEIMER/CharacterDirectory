@@ -6,4 +6,5 @@
 !/DiscordBot
 !/mySQL
 !*.py
+!*.sql
 !.gitignore
