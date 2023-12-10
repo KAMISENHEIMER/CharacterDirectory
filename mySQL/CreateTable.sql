@@ -1,32 +1,26 @@
 CREATE DATABASE character_directory;
 USE character_directory;
 CREATE TABLE `users`(
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `discord_id` BIGINT NOT NULL
+    `discord_id` BIGINT NOT NULL UNIQUE
 );
-ALTER TABLE
-    `users` ADD PRIMARY KEY `users_id_primary`(`id`);
-ALTER TABLE
-    `users` ADD UNIQUE `users_discord_id_unique`(`discord_id`);
-CREATE TABLE `character`(
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `characters`(
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `user` BIGINT NOT NULL,
+    `user` BIGINT UNSIGNED NOT NULL,
     `class` VARCHAR(255) NOT NULL,
     `subclass` VARCHAR(255) NOT NULL,
     `race` VARCHAR(255) NOT NULL,
     `lvl` INT NOT NULL DEFAULT '1',
-    `balance` INT NOT NULL,
-    `status` ENUM('') NOT NULL DEFAULT 'alive',
-    `quests_completed` INT NOT NULL,
-    `XP` DOUBLE(8, 2) NOT NULL,
+    `balance` INT NOT NULL DEFAULT '0',
+    `status` ENUM('alive','dead','retired','missing') NOT NULL DEFAULT 'alive',
+    `quests_completed` INT NOT NULL DEFAULT '0',
+    `XP` FLOAT NOT NULL DEFAULT '0',
     `body_status` VARCHAR(255) NULL,
-    `death_week` INT NULL,
+    `death_month` INT NULL,
     `notes` VARCHAR(255) NULL,
     `dm_notes` VARCHAR(255) NULL
 );
 ALTER TABLE
-    `character` ADD PRIMARY KEY `character_id_primary`(`id`);
-ALTER TABLE
-    `character` ADD CONSTRAINT `character_user_foreign` FOREIGN KEY(`user`) REFERENCES `users`(`id`);
+    `characters` ADD CONSTRAINT `character_user_foreign` FOREIGN KEY(`user`) REFERENCES `users`(`id`);
