@@ -105,32 +105,30 @@ async def me(ctx):
 @bot.command()
 async def list(ctx):
     """lists all currently living characters"""
-    # establishes connection and starts curser
-    connection = mysql.connector.connect(**db_config)
-    cursor = connection.cursor()
+    characters = getList("SELECT name, id FROM characters")
 
-    # builds query
-    query = "SELECT name FROM characters"
-
-    # runs query
-    cursor.execute(query)
-
-    # grabs result
-    characters = cursor.fetchall()
     if characters:
         response = "All characters:\n"
         for i in characters:
-            response = response + i[0] + "\n"
+            response = response + i[0] + ", " + str(i[1]) + "\n"
     else:
         response = "No current characters"
 
     await ctx.send(response)
 
 @bot.command()
-async def graveyard(ctx, arg):
+async def graveyard(ctx):
     """lists all characters in the graveyard"""
+    characters = getList("SELECT name FROM characters WHERE status = 'dead'")
 
-    await ctx.send("grave list goes here")
+    if characters:
+        response = "Graveyard:\n"
+        for i in characters:
+            response = response + i[0] + "\n"
+    else:
+        response = "No characters in the graveyard"
+
+    await ctx.send(response)
 
 @bot.command()
 async def createcharacter(ctx, name=None, clas=None, subclass=None, race=None):
@@ -166,8 +164,28 @@ async def createuser(ctx):
 
     await ctx.send(response)
 
+@bot.command()
+async def kill(ctx, character_id):
+    """kills a character based on their id"""
+
+    if updateCharacter("UPDATE characters SET status = 'dead' WHERE id = " + str(character_id)):
+        response = "Killed Character"
+    else:
+        response = "Failed To Kill Character"
+
+    await ctx.send(response)
 
 
+@bot.command()
+async def revive(ctx, character_id):
+    """kills a character based on their id"""
+
+    if updateCharacter("UPDATE characters SET status = 'alive' WHERE id = " + str(character_id)):
+        response = "Revived Character"
+    else:
+        response = "Failed To Revive Character"
+
+    await ctx.send(response)
 
 
 bot.run(BOT_TOKEN)
