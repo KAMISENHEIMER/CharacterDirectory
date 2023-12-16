@@ -102,6 +102,24 @@ async def me(ctx):
     user = ctx.author
     await ctx.send("Your Username is: " + user.global_name + "\nYour ID is: " + str(user.id))
 
+
+@bot.command()
+async def mycharacter(ctx):
+    """tells you information about your character"""
+    user_id = findUser(ctx.author.id)
+    info = getCharacterInfo(user_id)
+
+    # builds response
+    response = "ID: " + str(info[1]) + "\nName: " + info[0] + "\nClass: " + info[3] + " " + info[2] + "\nRace: " + info[4] + "\nLevel: " + str(info[5]) + "\nXP: "
+    # reformats XP
+    if info[8].is_integer():
+        response = response + str(int(info[8]))
+    else:
+        response = response + str(info[8])
+    response = response + "/" + str(info[5]+1) + "\nQuests Completed: " + str(info[7]) + "\nBalance: " + str(info[6]) + " GP"
+    await ctx.send(response)
+
+
 @bot.command()
 async def list(ctx):
     """lists all currently living characters"""

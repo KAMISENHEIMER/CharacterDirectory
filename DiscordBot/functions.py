@@ -97,3 +97,20 @@ def getList(query):
     except:
         return 0
 
+
+def getCharacterInfo(user_id):
+    try:
+        # establishes connection and starts curser
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # runs and retrieves query
+        cursor.execute("SELECT name, id, class, subclass, race, lvl, balance, quests_completed, XP FROM characters WHERE status = 'alive' AND user = " + str(user_id))
+        result = cursor.fetchall()
+
+        cursor.close()
+        return result[0]
+    except:
+        return 0
+
+
