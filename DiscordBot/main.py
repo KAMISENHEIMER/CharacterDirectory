@@ -107,7 +107,8 @@ async def me(ctx):
 async def mycharacter(ctx):
     """tells you information about your character"""
     user_id = findUser(ctx.author.id)
-    info = getCharacterInfo(user_id)
+    char_id = findCurrentCharacter(user_id)
+    info = getCharacterInfo(char_id)
 
     # builds response
     response = "ID: " + str(info[1]) + "\nName: " + info[0] + "\nClass: " + info[3] + " " + info[2] + "\nRace: " + info[4] + "\nLevel: " + str(info[5]) + "\nXP: "
@@ -167,7 +168,9 @@ async def createcharacter(ctx, name=None, clas=None, subclass=None, race=None):
         else:
             response = "Failed To Create Character"
     else:
-        response = "Incorrect use of command \nUse !createcharacter [Name] [Class] [Subclass] [Race]"
+        response = ("Incorrect use of command \n"
+                    "Use !createcharacter [Name] [Class] [Subclass] [Race] \n"
+                    "Use quotations for multiple words, ex: \"Mountain Dwarf\" ")
 
     await ctx.send(response)
 
@@ -205,5 +208,36 @@ async def revive(ctx, character_id):
 
     await ctx.send(response)
 
+
+@bot.command()
+async def delete(ctx, character_id):
+    """deletes a character based on their id"""
+
+    if deleteCharacter(character_id):
+        response = "Deleted Character"
+    else:
+        response = "Failed To Delete Character"
+
+    await ctx.send(response)
+
+
+@bot.command()
+async def completequest(ctx, questLevel, *ids):
+    """gives players XP based on completed quest"""
+    response = "Quest Completed"
+    for id in ids:
+        info = getCharacterInfo(id)
+        charLevel = info[5]
+        XP = info[8]
+        givenXP = (int(questLevel) - charLevel)/2 + 1
+        newXP = XP + givenXP
+        if newXP >= charLevel + 1:
+            charLevel += 1
+            newXP = 0
+        questsCompleted = getCharacterInfo(id)[7] + 1
+        if not updateCharacter("UPDATE characters SET XP = " + str(newXP) + ", quests_completed = " + str(questsCompleted) + ", lvl = " + str(charLevel) + " WHERE id = " + str(id)):
+            response = "Failed to Complete Quest"
+
+    await ctx.send(response)
 
 bot.run(BOT_TOKEN)

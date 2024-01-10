@@ -4,11 +4,15 @@ import random
 import mysql.connector
 from mysql.connector import Error
 
+# gets sql password
+File_object = open("SQL_PASSWORD.txt", "r")
+SQL_PASSWORD = File_object.readline()
+
 db_config = {
     'host': 'localhost',
     'database': 'character_directory',
     'user': 'root',
-    'password': '***REMOVED***!',
+    'password': SQL_PASSWORD,
 }
 
 
@@ -66,6 +70,19 @@ def findCharacter(id):
         return 0
 
 
+def findCurrentCharacter(user_id):
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        query = "SELECT id FROM characters WHERE status = 'alive' AND user = " + str(user_id)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        return result[0][0]
+    except:
+        return 0
+
+
 def updateCharacter(query):
     try:
         # establishes connection and starts curser
@@ -77,9 +94,9 @@ def updateCharacter(query):
         connection.commit()
         cursor.close()
 
-        return 1
+        return True
     except:
-        return 0
+        return False
 
 
 def getList(query):
@@ -98,14 +115,14 @@ def getList(query):
         return 0
 
 
-def getCharacterInfo(user_id):
+def getCharacterInfo(id):
     try:
         # establishes connection and starts curser
         connection = mysql.connector.connect(**db_config)
         cursor = connection.cursor()
 
         # runs and retrieves query
-        cursor.execute("SELECT name, id, class, subclass, race, lvl, balance, quests_completed, XP FROM characters WHERE status = 'alive' AND user = " + str(user_id))
+        cursor.execute("SELECT name, id, class, subclass, race, lvl, balance, quests_completed, XP FROM characters WHERE id = " + str(id))
         result = cursor.fetchall()
 
         cursor.close()
@@ -114,3 +131,17 @@ def getCharacterInfo(user_id):
         return 0
 
 
+def deleteCharacter(character_id):
+    try:
+        # establishes connection and starts curser
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+
+        # runs query, deleting the character
+        cursor.execute("DELETE FROM characters WHERE id = " + character_id)
+
+        connection.commit()
+        cursor.close()
+        return True
+    except:
+        return False
