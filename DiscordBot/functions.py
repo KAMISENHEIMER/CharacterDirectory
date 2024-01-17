@@ -131,17 +131,4 @@ def getCharacterInfo(id):
         return 0
 
 
-def deleteCharacter(character_id):
-    try:
-        # establishes connection and starts curser
-        connection = mysql.connector.connect(**db_config)
-        cursor = connection.cursor()
 
-        # runs query, deleting the character
-        cursor.execute("DELETE FROM characters WHERE id = " + character_id)
-
-        connection.commit()
-        cursor.close()
-        return True
-    except:
-        return False

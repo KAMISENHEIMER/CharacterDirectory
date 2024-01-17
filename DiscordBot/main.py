@@ -213,11 +213,25 @@ async def revive(ctx, character_id):
 async def delete(ctx, character_id):
     """deletes a character based on their id"""
 
-    if deleteCharacter(character_id):
+    if updateCharacter("DELETE FROM characters WHERE id = " + character_id):
         response = "Deleted Character"
     else:
         response = "Failed To Delete Character"
 
+    await ctx.send(response)
+
+
+@bot.command()
+async def updatecharacter(ctx, character_id=None, stat=None, new_info=None):
+    """updates information about a character"""
+    if character_id and stat and new_info:
+        if updateCharacter("UPDATE characters SET " + str(stat) + " = '" + str(new_info) + "' WHERE id = " + str(character_id)):
+            response = "Successfully Updated Character"
+        else:
+            response = "Failed To Update Character"
+    else:
+        response = ("Incorrect use of command \n"
+                    "Use !updatecharacter [ID] [Stat You'd Like To Update] [New Info]")
     await ctx.send(response)
 
 
