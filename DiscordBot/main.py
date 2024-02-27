@@ -185,9 +185,11 @@ async def createuser(ctx):
 
     await ctx.send(response)
 
+
 @bot.command()
+@commands.has_role('DM')
 async def kill(ctx, character_id):
-    """kills a character based on their id"""
+    """DM Only: kills a character based on their id"""
 
     if updateCharacter("UPDATE characters SET status = 'dead' WHERE id = " + str(character_id)):
         response = "Killed Character"
@@ -198,8 +200,9 @@ async def kill(ctx, character_id):
 
 
 @bot.command()
+@commands.has_role('DM')
 async def revive(ctx, character_id):
-    """kills a character based on their id"""
+    """DM Only: revives a character based on their id"""
 
     if updateCharacter("UPDATE characters SET status = 'alive' WHERE id = " + str(character_id)):
         response = "Revived Character"
@@ -210,8 +213,9 @@ async def revive(ctx, character_id):
 
 
 @bot.command()
+@commands.has_role('DM')
 async def delete(ctx, character_id):
-    """deletes a character based on their id"""
+    """DM Only: deletes a character based on their id"""
 
     if updateCharacter("DELETE FROM characters WHERE id = " + character_id):
         response = "Deleted Character"
@@ -222,8 +226,9 @@ async def delete(ctx, character_id):
 
 
 @bot.command()
+@commands.has_role('DM')
 async def updatecharacter(ctx, character_id=None, stat=None, new_info=None):
-    """updates information about a character"""
+    """DM Only: updates information about a character"""
     if character_id and stat and new_info:
         if updateCharacter("UPDATE characters SET " + str(stat) + " = '" + str(new_info) + "' WHERE id = " + str(character_id)):
             response = "Successfully Updated Character"
@@ -236,8 +241,9 @@ async def updatecharacter(ctx, character_id=None, stat=None, new_info=None):
 
 
 @bot.command()
+@commands.has_role('DM')
 async def completequest(ctx, questLevel, *ids):
-    """gives players XP based on completed quest"""
+    """DM Only:     gives players XP based on completed quest"""
     response = "Quest Completed"
     for id in ids:
         info = getCharacterInfo(id)
