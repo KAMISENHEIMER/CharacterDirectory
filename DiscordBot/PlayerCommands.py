@@ -154,11 +154,15 @@ class Commands(commands.Cog):
                 createUser(ctx.author.global_name, ctx.author.id)
                 userid = findUser(ctx.author.id)
 
-            # make character
-            if createCharacter(userid, name, clas, subclass, race):
-                response = "Created Character"
+            # check if they already have a character, and they don't have the role for it
+            if (findCurrentCharacter(userid) != 0) and not (ctx.author.get_role(1263240555840667682)):  # TODO: replace the id with something more dynamic (like have a get role by name run when the bot starts)
+                response = "You already have a living character. Use !mycharacter to see them."
             else:
-                response = "Failed To Create Character"
+                # make character
+                if createCharacter(userid, name, clas, subclass, race):
+                    response = "Created Character"
+                else:
+                    response = "Failed To Create Character"
         else:
             response = ("Incorrect use of command \n"
                         "Use !createcharacter [Name] [Class] [Subclass] [Race] \n"
