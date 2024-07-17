@@ -7,7 +7,7 @@ class Miscellaneous(commands.Cog):
     """Commands which do not have anything ot deal with the Character Directory"""
 
     @commands.command()
-    async def roll(ctx, dice: str):
+    async def roll(self, ctx, dice: str):
         """Rolls dice in NdN format."""
         try:
             rolls, limit = map(int, dice.split('d'))
@@ -19,24 +19,24 @@ class Miscellaneous(commands.Cog):
         await ctx.send(result)
 
     @commands.command()
-    async def add(ctx, left: int, right: int):
+    async def add(self, ctx, left: int, right: int):
         """Adds two numbers together."""
         await ctx.send(left + right)
 
     @commands.command(description='For when you wanna settle the score some other way')
-    async def choose(ctx, *choices: str):
+    async def choose(self, ctx, *choices: str):
         """Chooses between multiple choices."""
         await ctx.send(random.choice(choices))
 
     @commands.command()
-    async def repeat(ctx, times: int, content='repeating...'):
+    async def repeat(self, ctx, times: int, content='repeating...'):
         """Repeats a message multiple times."""
         for i in range(times):
             await ctx.send(content)
 
     # testing in taking in text and making the bot say text
     @commands.command()
-    async def echo(ctx, *args):
+    async def echo(self, ctx, *args):
         """makes the bot say what you just said"""
         await ctx.send(" ".join(args))
 

@@ -32,17 +32,98 @@ class Commands(commands.Cog):
             info[6]) + " GP"
         await ctx.send(response)
 
-    @commands.command()
+    @commands.group()
     async def list(self, ctx):
         """lists all currently living characters"""
-        characters = getList("SELECT name, id FROM characters")
+
+        # only runs the base command if no sub command is run
+        if ctx.invoked_subcommand is None:
+
+            characters = getList("SELECT name FROM characters WHERE status = 'alive'")
+
+            if characters:
+                response = "All current characters:\n"
+                for i in characters:
+                    response = response + i[0] + "\n"
+            else:
+                response = "No current characters"
+
+            await ctx.send(response)
+
+    @list.group()
+    async def all(self, ctx):
+        """lists all characters, living and dead"""
+
+        # only runs the base command if no sub command is run
+        if ctx.invoked_subcommand is None:
+            characters = getList("SELECT name FROM characters")
+
+            if characters:
+                response = "All characters:\n"
+                for i in characters:
+                    response = response + i[0] + "\n"
+            else:
+                response = "No current characters"
+
+            await ctx.send(response)
+
+    @list.command()
+    async def id(self, ctx):
+        """lists the name and id of all living characters"""
+
+        characters = getList("SELECT name, id FROM characters WHERE status = 'alive'")
 
         if characters:
-            response = "All characters:\n"
+            response = "All current characters (Name, ID):\n"
             for i in characters:
                 response = response + i[0] + ", " + str(i[1]) + "\n"
         else:
             response = "No current characters"
+
+        await ctx.send(response)
+
+    @all.command(name='id')
+    async def allid(self, ctx):
+        """lists the name and id of all characters"""
+
+        characters = getList("SELECT name, id FROM characters")
+
+        if characters:
+            response = "All characters (Name, ID):\n"
+            for i in characters:
+                response = response + i[0] + ", " + str(i[1]) + "\n"
+        else:
+            response = "No current characters"
+
+        await ctx.send(response)
+
+    @list.command()
+    async def level(self, ctx):
+        """lists the name and level of all living characters"""
+
+        characters = getList("SELECT name, lvl FROM characters WHERE status = 'alive' ORDER BY lvl DESC")
+
+        if characters:
+            response = "All characters (Name, Level):\n"
+            for i in characters:
+                response = response + i[0] + ", " + str(i[1]) + "\n"
+        else:
+            response = "No current characters"
+
+        await ctx.send(response)
+
+    @list.command()
+    async def users(self, ctx):
+        """lists all users on the server"""
+
+        characters = getList("SELECT name, id FROM users")
+
+        if characters:
+            response = "All users (Name, ID):\n"
+            for i in characters:
+                response = response + i[0] + ", " + str(i[1]) + "\n"
+        else:
+            response = "No current users"
 
         await ctx.send(response)
 
@@ -95,4 +176,3 @@ class Commands(commands.Cog):
             response = "Failed To Create User"
 
         await ctx.send(response)
-

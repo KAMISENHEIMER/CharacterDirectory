@@ -8,7 +8,7 @@ class DMOnly(commands.Cog):
 
     @commands.command()
     @commands.has_role('DM')
-    async def kill(ctx, character_id):
+    async def kill(self, ctx, character_id):
         """kills a character based on their id"""
 
         if updateCharacter("UPDATE characters SET status = 'dead' WHERE id = " + str(character_id)):
@@ -20,7 +20,7 @@ class DMOnly(commands.Cog):
 
     @commands.command()
     @commands.has_role('DM')
-    async def revive(ctx, character_id):
+    async def revive(self, ctx, character_id):
         """revives a character based on their id"""
 
         if updateCharacter("UPDATE characters SET status = 'alive' WHERE id = " + str(character_id)):
@@ -32,7 +32,7 @@ class DMOnly(commands.Cog):
 
     @commands.command()
     @commands.has_role('DM')
-    async def delete(ctx, character_id):
+    async def delete(self, ctx, character_id):
         """deletes a character based on their id"""
 
         if updateCharacter("DELETE FROM characters WHERE id = " + character_id):
@@ -44,7 +44,7 @@ class DMOnly(commands.Cog):
 
     @commands.command()
     @commands.has_role('DM')
-    async def updatecharacter(ctx, character_id=None, stat=None, new_info=None):
+    async def updatecharacter(self, ctx, character_id=None, stat=None, new_info=None):
         """updates information about a character"""
         if character_id and stat and new_info:
             if updateCharacter("UPDATE characters SET " + str(stat) + " = '" + str(new_info) + "' WHERE id = " + str(
@@ -59,7 +59,7 @@ class DMOnly(commands.Cog):
 
     @commands.command()
     @commands.has_role('DM')
-    async def completequest(ctx, questLevel, *ids):
+    async def completequest(self, ctx, questLevel, *ids):
         """gives players XP based on completed quest"""
         response = "Quest Completed"
         for id in ids:
