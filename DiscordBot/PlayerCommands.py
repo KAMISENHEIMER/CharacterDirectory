@@ -104,7 +104,7 @@ class Commands(commands.Cog):
         characters = getList("SELECT name, lvl FROM characters WHERE status = 'alive' ORDER BY lvl DESC")
 
         if characters:
-            response = "All characters (Name, Level):\n"
+            response = "All current characters (Name, Level):\n"
             for i in characters:
                 response = response + i[0] + ", " + str(i[1]) + "\n"
         else:

@@ -57,6 +57,32 @@ def findUser(discord_id):
         return 0
 
 
+def findUserFromCharacter(id):
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        query = "SELECT user FROM characters WHERE id = " + str(id)
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        return result[0]
+    except:
+        return 0
+
+
+def findDiscordID(id):
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        query = "SELECT discord_id FROM users WHERE id = " + str(id)
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        return result[0]
+    except:
+        return 0
+
+
 def findCharacter(id):
     try:
         connection = mysql.connector.connect(**db_config)

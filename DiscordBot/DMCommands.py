@@ -71,6 +71,9 @@ class DMOnly(commands.Cog):
             if newXP >= charLevel + 1:
                 charLevel += 1
                 newXP = 0
+                userID = findUserFromCharacter(id)
+                discordID = findDiscordID(userID)
+                response += "\n <@" + str(discordID) + ">, " + info[0] + " has leveled up, and is now level " + str(charLevel)
             questsCompleted = getCharacterInfo(id)[7] + 1
             if not updateCharacter("UPDATE characters SET XP = " + str(newXP) + ", quests_completed = " + str(
                     questsCompleted) + ", lvl = " + str(charLevel) + " WHERE id = " + str(id)):
